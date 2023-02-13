@@ -5,13 +5,14 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
      public PlayerSpriteRenderer smallRenderer;
-    public PlayerSpriteRenderer bigRenderer;
+    // public PlayerSpriteRenderer bigRenderer;
     private PlayerSpriteRenderer activeRenderer;
 
     public CapsuleCollider2D capsuleCollider { get; private set; }
     public DeathAnimation deathAnimation { get; private set; }
 
-    public bool big => bigRenderer.enabled;
+    // public bool big => bigRenderer.enabled;
+
     public bool dead => deathAnimation.enabled;
     public bool starpower { get; private set; }
 
@@ -26,46 +27,42 @@ public class Player : MonoBehaviour
     {
         if (!dead)
         {
-            if (big) {
-                Shrink();
-            } else {
-                Death();
-            }
+            Death();
         }
     }
 
     public void Death()
     {
         smallRenderer.enabled = false;
-        bigRenderer.enabled = false;
+        // bigRenderer.enabled = false;
         deathAnimation.enabled = true;
 
         GameManager.Instance.ResetLevel(3f);
     }
 
-    public void Grow()
-    {
-        smallRenderer.enabled = false;
-        bigRenderer.enabled = true;
-        activeRenderer = bigRenderer;
+    // public void Grow()
+    // {
+    //     smallRenderer.enabled = false;
+    //     bigRenderer.enabled = true;
+    //     activeRenderer = bigRenderer;
 
-        capsuleCollider.size = new Vector2(1f, 2f);
-        capsuleCollider.offset = new Vector2(0f, 0.5f);
+    //     capsuleCollider.size = new Vector2(1f, 2f);
+    //     capsuleCollider.offset = new Vector2(0f, 0.5f);
 
-        StartCoroutine(ScaleAnimation());
-    }
+    //     StartCoroutine(ScaleAnimation());
+    // }
 
-    public void Shrink()
-    {
-        smallRenderer.enabled = true;
-        bigRenderer.enabled = false;
-        activeRenderer = smallRenderer;
+    // public void Shrink()
+    // {
+    //     smallRenderer.enabled = true;
+    //     bigRenderer.enabled = false;
+    //     activeRenderer = smallRenderer;
 
-        capsuleCollider.size = new Vector2(1f, 1f);
-        capsuleCollider.offset = new Vector2(0f, 0f);
+    //     capsuleCollider.size = new Vector2(1f, 1f);
+    //     capsuleCollider.offset = new Vector2(0f, 0f);
 
-        StartCoroutine(ScaleAnimation());
-    }
+    //     StartCoroutine(ScaleAnimation());
+    // }
 
     private IEnumerator ScaleAnimation()
     {
@@ -79,14 +76,14 @@ public class Player : MonoBehaviour
             if (Time.frameCount % 4 == 0)
             {
                 smallRenderer.enabled = !smallRenderer.enabled;
-                bigRenderer.enabled = !smallRenderer.enabled;
+                // bigRenderer.enabled = !smallRenderer.enabled;
             }
 
             yield return null;
         }
 
         smallRenderer.enabled = false;
-        bigRenderer.enabled = false;
+        // bigRenderer.enabled = false;
         activeRenderer.enabled = true;
     }
 

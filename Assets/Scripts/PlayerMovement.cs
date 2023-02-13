@@ -7,7 +7,6 @@ public class PlayerMovement : MonoBehaviour
     private new Camera camera;
     private new Rigidbody2D rigidbody;
     private new Collider2D collider;
-    public GameObject lep;
 
     private Vector2 velocity;
     private float inputAxis;
@@ -23,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     public bool jumping {get; private set;}
      public bool running => Mathf.Abs(velocity.x) > 0.25f || Mathf.Abs(inputAxis) > 0.25f;
     public bool sliding => (inputAxis > 0f && velocity.x < 0f) || (inputAxis < 0f && velocity.x > 0f);
+    public bool falling => velocity.y < 0f && !grounded;
 
     // auto call this function when first time redering script
     private void Awake()
@@ -30,6 +30,22 @@ public class PlayerMovement : MonoBehaviour
         rigidbody = GetComponent<Rigidbody2D>();
         collider = GetComponent<Collider2D>();
         camera = Camera.main;
+    }
+
+    private void OnEnable()
+    {
+        rigidbody.isKinematic = false;
+        collider.enabled = true;
+        velocity = Vector2.zero;
+        jumping = false;
+    }
+
+    private void OnDisable()
+    {
+        rigidbody.isKinematic = true;
+        collider.enabled = false;
+        velocity = Vector2.zero;
+        jumping = false;
     }
 
     // auto call every single frame is running
@@ -86,7 +102,7 @@ public class PlayerMovement : MonoBehaviour
     private void ApplyGravity()
     {
         // check if falling
-        bool falling = velocity.y < 0f || !!Input.GetButton("Jump");
+        bool falling = velocity.y < 0f || !Input.GetButton("Jump");
         float multiplier = falling ? 2f : 1f;
 
         // apply gravity and terminal velocity
